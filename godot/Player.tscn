@@ -1,8 +1,8 @@
 [gd_scene load_steps=3 format=2]
 
 [sub_resource type="CapsuleShape" id=1]
-radius = 0.31258
-height = 0.686647
+radius = 0.226925
+height = 0.775833
 
 [sub_resource type="CubeMesh" id=2]
 

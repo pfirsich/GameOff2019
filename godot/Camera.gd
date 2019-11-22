@@ -1,18 +1,19 @@
 extends Camera
 
-const DEFAULT_DISTANCE = 10
-const DEFAULT_HEIGHT = 6
+export var DEFAULT_DISTANCE = 3.5
+export var DEFAULT_HEIGHT = 1.5
 
 export var CAMERA_INTERP_SPEED = 4.0
 export(Vector2) var CAMERA_DEADZONE = Vector2(0.2, 0.2)
 
 var camera_control_zone : Node = null
 var target_node : Spatial = null
-var distance = DEFAULT_DISTANCE
-var height = DEFAULT_HEIGHT
+var distance
+var height
 
 func _ready():
-    pass # Replace with function body.
+    distance = DEFAULT_DISTANCE
+    height = DEFAULT_HEIGHT
 
 func _process(delta):
     if target_node == null:

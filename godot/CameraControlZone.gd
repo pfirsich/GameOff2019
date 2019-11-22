@@ -1,8 +1,8 @@
 extends CollisionShape
 
 export(NodePath) var target_node = null
-export var distance = 10
-export var height = 6
+export var distance = 10.0
+export var height = 6.0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
