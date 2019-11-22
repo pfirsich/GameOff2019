@@ -33,7 +33,7 @@ func _process(delta):
 func take_control(control_zone):
     camera_control_zone = control_zone
     if control_zone.target_node:
-        target_node = control_zone.target_node
+        target_node = get_node(control_zone.target_node)
     else:
         target_node = $Player
 

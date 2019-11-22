@@ -26,9 +26,19 @@ func _physics_process(delta):
     if sign(velocity.x) != sign(moveX):
         accel *= TURNAROUND_ACCEL_FACTOR
     velocity.x += moveX * accel * delta
+
     if abs(velocity.x) > MAX_SPEED:
         velocity.x = sign(velocity.x) * MAX_SPEED
+
     if moveX == 0:
-        velocity.x -= sign(velocity.x) * MAX_SPEED / FRICTION * delta
-    velocity.y += -gravity * delta
+        var friction = -sign(velocity.x) * MAX_SPEED / FRICTION * delta
+
+        if sign(velocity.x) != sign(velocity.x + friction):
+            velocity.x = 0
+        else:
+            velocity.x += friction
+
+    if !is_on_floor():
+        velocity.y += -gravity * delta
+
     move_and_slide(Vector3(velocity.x, velocity.y, 0), Vector3(0, 1, 0), true)

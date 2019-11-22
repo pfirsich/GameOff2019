@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Player.gd" type="Script" id=2]
 [ext_resource path="res://Camera.gd" type="Script" id=3]
 [ext_resource path="res://Station.tscn" type="PackedScene" id=4]
+[ext_resource path="res://CameraControlZone.tscn" type="PackedScene" id=5]
 
 [sub_resource type="Environment" id=1]
 ambient_light_color = Color( 0.329412, 0.419608, 0.505882, 1 )
@@ -15,19 +16,31 @@ ssao_quality = 1
 [node name="Main" type="Node"]
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
-collision_layer = 2
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 26.8472, 1.05485, 0 )
 script = ExtResource( 2 )
 JUMP_HEIGHT = 0.75
 JUMP_DURATION = 0.7
 TURNAROUND_ACCEL_FACTOR = 4.0
 
-[node name="Camera" type="Camera" parent="."]
+[node name="Camera" type="Camera" parent="." groups=[
+"camera",
+]]
 transform = Transform( 1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0.138204, 6.04212, 9.39323 )
 environment = SubResource( 1 )
 script = ExtResource( 3 )
+CAMERA_DEADZONE = Vector2( 1, 1 )
 
 [node name="DirectionalLight" type="DirectionalLight" parent="."]
 transform = Transform( -0.0651569, -0.517133, -0.853421, 0.638058, -0.67915, 0.362819, -0.767226, -0.520892, 0.374212, -32.2384, 15.5326, 13.1702 )
 shadow_bias = -0.1
 
 [node name="Station" parent="." instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.241172, -0.406873, -0.224398 )
+
+[node name="FirstOrbCCZ" parent="." instance=ExtResource( 5 )]
+transform = Transform( 5, 0, 0, 0, 4, 0, 0, 0, 1, 28.7371, 3.18829, 0 )
+target_node = NodePath("../FirstOrb")
+height = 2.0
+
+[node name="FirstOrb" type="Spatial" parent="."]
+transform = Transform( 1, 0, 0, 0, 0.939693, -0.34202, 0, 0.34202, 0.939693, 29.1431, 2.15455, -0.588584 )
