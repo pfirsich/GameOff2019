@@ -19,6 +19,7 @@ collision_layer = 2
 script = ExtResource( 2 )
 JUMP_HEIGHT = 0.75
 JUMP_DURATION = 0.7
+TURNAROUND_ACCEL_FACTOR = 4.0
 
 [node name="Camera" type="Camera" parent="."]
 transform = Transform( 1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0.138204, 6.04212, 9.39323 )

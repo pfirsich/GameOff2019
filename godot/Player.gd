@@ -5,6 +5,7 @@ export var MAX_SPEED = 4.0
 export var FRICTION = 0.5 # seconds until MAX_SPEED goes to 0
 export var JUMP_HEIGHT = 1.0
 export var JUMP_DURATION = 0.5
+export var TURNAROUND_ACCEL_FACTOR = 3.0
 
 var velocity = Vector2()
 var gravity
@@ -16,12 +17,15 @@ func _ready():
     gravity = jump_vel / jump_dur_half
 
 func _process(delta):
-    if Input.is_action_just_pressed("jump"):
+    if Input.is_action_just_pressed("jump") and is_on_floor():
         velocity.y = jump_vel
 
 func _physics_process(delta):
     var moveX = int(Input.is_action_pressed("move_right")) - int(Input.is_action_pressed("move_left"))
-    velocity.x += moveX * ACCEL * delta
+    var accel = ACCEL
+    if sign(velocity.x) != sign(moveX):
+        accel *= TURNAROUND_ACCEL_FACTOR
+    velocity.x += moveX * accel * delta
     if abs(velocity.x) > MAX_SPEED:
         velocity.x = sign(velocity.x) * MAX_SPEED
     if moveX == 0:
