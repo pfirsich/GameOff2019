@@ -38,9 +38,10 @@ shadow_bias = -0.1
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.241172, -0.406873, -0.224398 )
 
 [node name="FirstOrbCCZ" parent="." instance=ExtResource( 5 )]
-transform = Transform( 5, 0, 0, 0, 4, 0, 0, 0, 1, 28.7371, 3.18829, 0 )
+transform = Transform( 5, 0, 0, 0, 4, 0, 0, 0, 1, 28.4813, 3.94135, 0 )
 target_node = NodePath("../FirstOrb")
-height = 2.0
+distance = 6.0
+height = 1.0
 
 [node name="FirstOrb" type="Spatial" parent="."]
 transform = Transform( 1, 0, 0, 0, 0.939693, -0.34202, 0, 0.34202, 0.939693, 29.1431, 2.15455, -0.588584 )
