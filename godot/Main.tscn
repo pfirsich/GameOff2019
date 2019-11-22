@@ -1,23 +1,10 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Player.gd" type="Script" id=2]
+[ext_resource path="res://Station.tscn" type="PackedScene" id=3]
 
-[sub_resource type="BoxShape" id=1]
-extents = Vector3( 11.2816, 0.314121, 16.9822 )
-
-[sub_resource type="PlaneMesh" id=2]
-
-[sub_resource type="CubeMesh" id=4]
-
-[sub_resource type="BoxShape" id=3]
-extents = Vector3( 6.46653, 2.1789, 3.55315 )
-
-[sub_resource type="CubeMesh" id=5]
-
-[sub_resource type="BoxShape" id=7]
-
-[sub_resource type="Environment" id=6]
+[sub_resource type="Environment" id=7]
 ambient_light_color = Color( 0.329412, 0.419608, 0.505882, 1 )
 ssao_enabled = true
 ssao_quality = 1
@@ -25,50 +12,16 @@ ssao_quality = 1
 [node name="Main" type="Node"]
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -8.974, 2.149, 0 )
 collision_layer = 2
 script = ExtResource( 2 )
 
-[node name="Floor" type="StaticBody" parent="."]
-transform = Transform( -0.00689112, 0, 0.999976, 0, 1, 0, -0.999976, 0, -0.00689112, 0.0297691, -4.76837e-07, -0.000364304 )
-collision_mask = 0
-
-[node name="CollisionShape" type="CollisionShape" parent="Floor"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.316753, 0 )
-shape = SubResource( 1 )
-
-[node name="MeshInstance" type="MeshInstance" parent="Floor"]
-transform = Transform( 11.3215, 0, 0, 0, 1, 0, 0, 0, 16.9956, 0, 0, 0 )
-mesh = SubResource( 2 )
-material/0 = null
-
-[node name="Platform" type="StaticBody" parent="."]
-transform = Transform( -0.00689112, 0, 0.999976, 0, 1, 0, -0.999976, 0, -0.00689112, 0.0297691, -4.76837e-07, -0.000364304 )
-collision_mask = 0
-
-[node name="MeshInstance" type="MeshInstance" parent="Platform"]
-transform = Transform( 6.7345, 0, 0, 0, 2.35754, 0, 0, 0, 3.48035, 0, 0, 9.91569 )
-mesh = SubResource( 4 )
-material/0 = null
-
-[node name="CollisionShape" type="CollisionShape" parent="Platform"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 6.56291e-09, 0, 10.0837 )
-shape = SubResource( 3 )
-
-[node name="MeshInstance2" type="MeshInstance" parent="Platform"]
-transform = Transform( 2.766, 0, 0, 0, 1.49945, 1.54803, 0, -0.400423, 5.79686, 0, -0.657007, 1.10931 )
-mesh = SubResource( 5 )
-material/0 = null
-
-[node name="CollisionShape2" type="CollisionShape" parent="Platform"]
-transform = Transform( 2.799, 0, 0, 0, 1.49945, 1.54806, 0, -0.400431, 5.79685, 0, -0.657, 1.109 )
-shape = SubResource( 7 )
-
 [node name="Camera" type="Camera" parent="."]
 transform = Transform( 1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0.138204, 6.04212, 9.39323 )
-environment = SubResource( 6 )
+environment = SubResource( 7 )
 
 [node name="DirectionalLight" type="DirectionalLight" parent="."]
-transform = Transform( 0.156519, 0.575762, 0.802496, 0.638058, -0.67915, 0.362819, 0.753912, 0.455251, -0.47367, 0, 0, 0 )
+transform = Transform( -0.0651569, -0.517133, -0.853421, 0.638058, -0.67915, 0.362819, -0.767226, -0.520892, 0.374212, -32.2384, 15.5326, 13.1702 )
 shadow_enabled = true
 shadow_bias = -0.1
+
+[node name="Station" parent="." instance=ExtResource( 3 )]
