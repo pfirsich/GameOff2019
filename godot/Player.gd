@@ -1,20 +1,30 @@
 extends KinematicBody
 
-export var GRAVITY = 1.0
 export var ACCEL = 10.0
+export var MAX_SPEED = 4.0
+export var FRICTION = 0.5 # seconds until MAX_SPEED goes to 0
+export var JUMP_HEIGHT = 1.0
+export var JUMP_DURATION = 0.5
 
 var velocity = Vector2()
+var gravity
+var jump_vel
 
-# Called when the node enters the scene tree for the first time.
-#func _ready():
-#	pass # Replace with function body.
+func _ready():
+    var jump_dur_half = JUMP_DURATION / 2.0
+    jump_vel = 2 * JUMP_HEIGHT / jump_dur_half
+    gravity = jump_vel / jump_dur_half
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass
+func _process(delta):
+    if Input.is_action_just_pressed("jump"):
+        velocity.y = jump_vel
 
 func _physics_process(delta):
     var moveX = int(Input.is_action_pressed("move_right")) - int(Input.is_action_pressed("move_left"))
     velocity.x += moveX * ACCEL * delta
-    velocity.y += -GRAVITY * delta
-    move_and_collide(Vector3(velocity.x * delta, velocity.y * delta, 0))
+    if abs(velocity.x) > MAX_SPEED:
+        velocity.x = sign(velocity.x) * MAX_SPEED
+    if moveX == 0:
+        velocity.x -= sign(velocity.x) * MAX_SPEED / FRICTION * delta
+    velocity.y += -gravity * delta
+    move_and_slide(Vector3(velocity.x, velocity.y, 0), Vector3(0, 1, 0), true)
