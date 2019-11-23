@@ -54,5 +54,6 @@ teleport={
 
 [rendering]
 
+environment/default_clear_color=Color( 0.188235, 0.188235, 0.188235, 1 )
 quality/filters/msaa=2
 environment/default_environment="res://default_env.tres"
