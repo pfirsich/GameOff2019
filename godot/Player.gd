@@ -7,7 +7,7 @@ export var JUMP_HEIGHT = 1.0
 export var JUMP_DURATION = 0.5
 export var TURNAROUND_ACCEL_FACTOR = 3.0
 export var TELEPORT_DISTANCE = 4.0
-export var TELEPORT_SAMPLES = 16
+export var TELEPORT_VELOCITY = 2.0
 
 export var has_upgrade_teleport = true
 
@@ -19,10 +19,15 @@ func _ready():
     var jump_dur_half = JUMP_DURATION / 2.0
     jump_vel = 2 * JUMP_HEIGHT / jump_dur_half
     gravity = jump_vel / jump_dur_half
+    set_axis_lock(PhysicsServer.BODY_AXIS_LINEAR_Z, true)
 
 func _process(delta):
     if Input.is_action_just_pressed("jump"):# and is_on_floor():
         velocity.y = jump_vel
+
+func zeroZ(vec : Vector3):
+    vec.z = 0
+    return vec
 
 func _physics_process(delta):
     var moveX = int(Input.is_action_pressed("move_right")) - int(Input.is_action_pressed("move_left"))
@@ -46,6 +51,7 @@ func _physics_process(delta):
         velocity.y += -gravity * delta
 
     move_and_slide(Vector3(velocity.x, velocity.y, 0), Vector3(0, 1, 0), true)
+    set_translation(zeroZ(get_translation()))
 
     if has_upgrade_teleport and Input.is_action_just_pressed("teleport"):
         teleport()
@@ -61,7 +67,6 @@ func get_teleport_dir():
     var t = -ray_orig.z / ray_dir.z # ray_orig.z + ray_dir.z * t = 0
     var point_in_z0plane = ray_orig + t * ray_dir
     #return Vector3(1, 0, 0).normalized()
-
     return (point_in_z0plane - get_translation()).normalized()
 
 func get_teleport_pos(teleport_dir):
@@ -83,9 +88,11 @@ func get_teleport_pos(teleport_dir):
                 return target_pos
 
 func teleport():
-    var teleport_dir = get_teleport_dir()
-    var teleport_pos = get_teleport_pos(teleport_dir)
+    # zero z everywhere to glitch out less
+    var teleport_dir = zeroZ(get_teleport_dir())
+    var teleport_pos = zeroZ(get_teleport_pos(teleport_dir))
     mark(teleport_pos, "r")
     set_translation(teleport_pos)
     # TODO: Teleport into floor (diagonal). Slide?
     move_and_collide(teleport_dir * 1e-2)
+    velocity = TELEPORT_VELOCITY * teleport_dir
