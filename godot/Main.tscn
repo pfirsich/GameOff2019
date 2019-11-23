@@ -1,23 +1,19 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=9 format=2]
 
-[ext_resource path="res://Demon.tscn" type="PackedScene" id=1]
-[ext_resource path="res://Player.tscn" type="PackedScene" id=2]
-[ext_resource path="res://Player.gd" type="Script" id=3]
-[ext_resource path="res://default_env.tres" type="Environment" id=4]
-[ext_resource path="res://Camera.gd" type="Script" id=5]
-[ext_resource path="res://Station.tscn" type="PackedScene" id=6]
-[ext_resource path="res://CameraControlZone.tscn" type="PackedScene" id=7]
-[ext_resource path="res://MarkerSpawner.gd" type="Script" id=8]
-[ext_resource path="res://ShadowLight.tscn" type="PackedScene" id=9]
+[ext_resource path="res://Player.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Player.gd" type="Script" id=2]
+[ext_resource path="res://default_env.tres" type="Environment" id=3]
+[ext_resource path="res://Camera.gd" type="Script" id=4]
+[ext_resource path="res://Station.tscn" type="PackedScene" id=5]
+[ext_resource path="res://CameraControlZone.tscn" type="PackedScene" id=6]
+[ext_resource path="res://MarkerSpawner.gd" type="Script" id=7]
+[ext_resource path="res://ShadowLight.tscn" type="PackedScene" id=8]
 
 [node name="Main" type="Node"]
 
-[node name="Demon" parent="." instance=ExtResource( 1 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 20.7264, 1.166, 0 )
-
-[node name="Player" parent="." instance=ExtResource( 2 )]
+[node name="Player" parent="." instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 15.1407, 3.42984, 0 )
-script = ExtResource( 3 )
+script = ExtResource( 2 )
 JUMP_HEIGHT = 0.75
 JUMP_DURATION = 0.7
 TURNAROUND_ACCEL_FACTOR = 4.0
@@ -26,14 +22,14 @@ TURNAROUND_ACCEL_FACTOR = 4.0
 "camera",
 ]]
 transform = Transform( 1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0.138204, 6.04212, 9.39323 )
-environment = ExtResource( 4 )
-script = ExtResource( 5 )
+environment = ExtResource( 3 )
+script = ExtResource( 4 )
 CAMERA_DEADZONE = Vector2( 1, 1 )
 
-[node name="Station" parent="." instance=ExtResource( 6 )]
+[node name="Station" parent="." instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.093, -0.124, 0 )
 
-[node name="FirstOrbCCZ" parent="." instance=ExtResource( 7 )]
+[node name="FirstOrbCCZ" parent="." instance=ExtResource( 6 )]
 transform = Transform( 5, 0, 0, 0, 4, 0, 0, 0, 1, 26.9299, 3.94135, 0 )
 target_node = NodePath("../FirstOrb")
 distance = 6.0
@@ -43,14 +39,14 @@ height = 1.0
 transform = Transform( 1, 0, 0, 0, 0.939693, -0.34202, 0, 0.34202, 0.939693, 27.5985, 3.27696, 0 )
 
 [node name="MarkerSpawner" type="Node" parent="."]
-script = ExtResource( 8 )
+script = ExtResource( 7 )
 
-[node name="ShadowLight" parent="." instance=ExtResource( 9 )]
+[node name="ShadowLight" parent="." instance=ExtResource( 8 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 18.8505, 4.2272, 0.563574 )
 
-[node name="ShadowLight2" parent="." instance=ExtResource( 9 )]
+[node name="ShadowLight2" parent="." instance=ExtResource( 8 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 13.0627, 3.42984, 0.563604 )
 
-[node name="ShadowLight3" parent="." instance=ExtResource( 9 )]
+[node name="ShadowLight3" parent="." instance=ExtResource( 8 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 13.425, 1.433, 0.564 )
 omni_shadow_mode = 1
