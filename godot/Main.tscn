@@ -16,7 +16,7 @@ ssao_quality = 1
 [node name="Main" type="Node"]
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 26.8472, 1.05485, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 15.1407, 3.42984, 0 )
 script = ExtResource( 2 )
 JUMP_HEIGHT = 0.75
 JUMP_DURATION = 0.7
