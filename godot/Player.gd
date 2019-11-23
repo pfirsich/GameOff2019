@@ -61,6 +61,7 @@ func get_teleport_dir():
     var t = -ray_orig.z / ray_dir.z # ray_orig.z + ray_dir.z * t = 0
     var point_in_z0plane = ray_orig + t * ray_dir
     #return Vector3(1, 0, 0).normalized()
+
     return (point_in_z0plane - get_translation()).normalized()
 
 func get_teleport_pos(teleport_dir):

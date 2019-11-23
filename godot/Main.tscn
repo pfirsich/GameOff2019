@@ -36,16 +36,15 @@ transform = Transform( -0.0651569, -0.517133, -0.853421, 0.638058, -0.67915, 0.3
 shadow_bias = -0.1
 
 [node name="Station" parent="." instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.241172, -0.406873, -0.224398 )
 
 [node name="FirstOrbCCZ" parent="." instance=ExtResource( 5 )]
-transform = Transform( 5, 0, 0, 0, 4, 0, 0, 0, 1, 28.4813, 3.94135, 0 )
+transform = Transform( 5, 0, 0, 0, 4, 0, 0, 0, 1, 26.9299, 3.94135, 0 )
 target_node = NodePath("../FirstOrb")
 distance = 6.0
 height = 1.0
 
 [node name="FirstOrb" type="Spatial" parent="."]
-transform = Transform( 1, 0, 0, 0, 0.939693, -0.34202, 0, 0.34202, 0.939693, 29.1431, 2.15455, -0.588584 )
+transform = Transform( 1, 0, 0, 0, 0.939693, -0.34202, 0, 0.34202, 0.939693, 27.5985, 3.27696, 0 )
 
 [node name="MarkerSpawner" type="Node" parent="."]
 script = ExtResource( 6 )
