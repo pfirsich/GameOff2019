@@ -1,0 +1,2 @@
+#!/bin/sh
+sed --in-place 's/[[:space:]]\+$//' *.gd
