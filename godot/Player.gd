@@ -11,8 +11,6 @@ export var TELEPORT_SAMPLES = 16
 
 export var has_upgrade_teleport = true
 
-var markerScene = preload("res://Marker.tscn")
-
 var velocity = Vector2()
 var gravity
 var jump_vel
@@ -52,55 +50,41 @@ func _physics_process(delta):
     if has_upgrade_teleport and Input.is_action_just_pressed("teleport"):
         teleport()
 
-func teleport():
-    for i in range(TELEPORT_SAMPLES):
-        var dist = TELEPORT_DISTANCE * (1 - i / TELEPORT_SAMPLES)
-        var dir = Vector3(1, 1, 0).normalized()
-        var target = get_translation() + dir * dist;
-        if is_pos_valid(target):
-            translate(dir * dist)
-        break
+func mark(pos, col):
+    get_node("../MarkerSpawner").mark(pos, col)
 
-func mark(position, color):
-    var marker = markerScene.instance()
-    marker.set_translation(position)
-    var mat = marker.get_surface_material(0).duplicate()
-    mat.albedo_color = color
-    mat.albedo_color.a = 0.4
-    marker.set_surface_material(0, mat)
-    get_tree().get_root().add_child(marker)
+func get_teleport_dir():
+    var camera = get_viewport().get_camera()
+    var mouse_pos = get_viewport().get_mouse_position()
+    var ray_orig = camera.project_ray_origin(mouse_pos)
+    var ray_dir = camera.project_ray_normal(mouse_pos)
+    var t = -ray_orig.z / ray_dir.z # ray_orig.z + ray_dir.z * t = 0
+    var point_in_z0plane = ray_orig + t * ray_dir
+    #return Vector3(1, 0, 0).normalized()
+    return (point_in_z0plane - get_translation()).normalized()
 
-const red = Color(1, 0, 0)
-const green = Color(0, 1, 0)
-const blue = Color(0, 0, 1)
-const yellow = Color(1, 1, 0)
-const purple = Color(1, 0, 1)
-
-func is_pos_valid(pos: Vector3):
-    print(">>>> is_pos_valid")
-    print("Pos:", pos)
-    print("Player Pos:", get_translation())
-    mark(pos, yellow)
-    mark(get_translation(), green)
-    var rel = pos - get_translation()
-    var trafo = get_transform().translated(rel)
-
-    # false if we are in a wall
-    if test_move(trafo, Vector3(0, 0, 0)):
-        return false
-
+func get_teleport_pos(teleport_dir):
+    var target_pos = get_translation() + teleport_dir * TELEPORT_DISTANCE
+    mark(target_pos, "y")
+    var cur_pos = get_translation()
+    var inside = false
     var space_state = get_world().direct_space_state
-    print("Rel:", rel)
-    var hit = space_state.intersect_ray(pos, get_translation(), [self])
-    # We should actually assert !hit.empty() here, because it should never be empty.
-    # But we don't want games to crash because of this, so just return false instead.
-    if hit.empty():
-        return false
-    print("Normal:", hit)
-    mark(hit["position"], blue)
-    var rev_hit = space_state.intersect_ray(get_translation(), pos, [self])
-    print("From player to teleport position:", rev_hit)
-    # rel points from the the player to teleport position.
-    # We have to hit a face with a normal pointing along the ray vector to be outside of the mesh.
-    return hit["normal"].dot(rel) > 0
+    while true: # TODO: limit this?
+        var hit = space_state.intersect_ray(cur_pos, target_pos, [self])
+        if !hit.empty():
+            mark(hit["position"], "g")
+            inside = !inside
+            cur_pos = hit["position"] + 1e-5*teleport_dir# don't start inside the polygon
+        else:
+            if inside: # Target position is inside a mesh, return last hit
+                return cur_pos - 2e-1*teleport_dir
+            else: # Target position is not inside a mesh! We can go there directly
+                return target_pos
 
+func teleport():
+    var teleport_dir = get_teleport_dir()
+    var teleport_pos = get_teleport_pos(teleport_dir)
+    mark(teleport_pos, "r")
+    set_translation(teleport_pos)
+    # TODO: Teleport into floor (diagonal). Slide?
+    move_and_collide(teleport_dir * 1e-2)
