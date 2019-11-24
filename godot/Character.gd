@@ -9,7 +9,6 @@ export var FRICTION = 0.5 # seconds until MAX_SPEED goes to 0
 export var JUMP_HEIGHT = 1.0
 export var JUMP_DURATION = 0.5
 export var TURNAROUND_ACCEL_FACTOR = 3.0
-export var TELEPORT_DISTANCE = 4.0
 export var TELEPORT_VELOCITY = 2.0
 export var CUSHION_SIZE = 0.35
 
@@ -59,27 +58,32 @@ func integrate(delta):
         move_and_slide(Vector3(velocity.x, velocity.y, 0), Vector3(0, 1, 0), true)
         set_translation(zero_z(get_translation()))
 
+func mark_force(pos, col):
+    get_node("../MarkerSpawner").mark(pos, col)
+
 func mark(pos, col):
     if show_markers:
-        get_node("../MarkerSpawner").mark(pos, col)
+        mark_force(pos, col)
+
+func raycast_level(from, to):
+    var space_state = get_world().direct_space_state
+    return space_state.intersect_ray(from, to, [self], 2)
 
 func is_inside(position):
-    var space_state = get_world().direct_space_state
     var pos = get_translation()
-    var hit = space_state.intersect_ray(pos, pos + CHECK_INSIDE_DEPTH * Vector3(0, 0, 1), [self])
+    var hit = raycast_level(pos, pos + CHECK_INSIDE_DEPTH * Vector3(0, 0, 1))
     return !hit.empty() # hit => we are inside
 
-func get_teleport_pos(teleport_dir):
-    var target_pos = get_translation() + teleport_dir * TELEPORT_DISTANCE
+func get_teleport_pos(target_pos):
+    var teleport_dir = zero_z(target_pos - get_translation()).normalized()
     mark(target_pos, "y")
     var last_hit = {"position": get_translation(), "normal": teleport_dir}
-    var space_state = get_world().direct_space_state
     var inside = is_inside(get_translation())
     while true: # TODO: limit this?
         # Add some bias to the starting position, so we don't start
         # inside the polygon when we start from a later hit
         var start_pos = last_hit["position"] + 1e-5*teleport_dir
-        var hit = space_state.intersect_ray(start_pos, target_pos, [self])
+        var hit = raycast_level(start_pos, target_pos)
         if !hit.empty():
             mark(hit["position"], "g")
             last_hit = hit
@@ -102,16 +106,17 @@ func apply_cushion():
             var push_dist = CUSHION_SIZE - (hit["position"] - pos).length()
             set_translation(pos - push_dist * dir)
 
-func teleport(teleport_dir):
+func teleport(target_pos):
     var backup_pos = get_translation()
     # zero z everywhere to glitch out less
-    teleport_dir = zero_z(teleport_dir)
-    var teleport_pos = zero_z(get_teleport_pos(teleport_dir))
+    target_pos = zero_z(target_pos)
+    var teleport_pos = zero_z(get_teleport_pos(target_pos))
     mark(teleport_pos, "r")
     set_translation(teleport_pos)
     teleport_pos = apply_cushion()
     mark(get_translation(), "p")
     # TODO: Teleport into floor (diagonal). Slide?
+    var teleport_dir = zero_z(target_pos - get_translation()).normalized()
     move_and_collide(teleport_dir * 1e-2)
     # If we fucked up, just undo the teleport (add feedback later)
     if is_inside(get_translation()):

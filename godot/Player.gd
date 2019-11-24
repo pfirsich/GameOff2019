@@ -1,5 +1,6 @@
 extends "res://Character.gd"
 
+export var TELEPORT_DISTANCE = 4.0
 export var TELEPORT_LOG_TIMEOUT = 1.5
 
 export var has_upgrade_teleport = true
@@ -37,14 +38,6 @@ func _physics_process(delta):
 
     if has_upgrade_teleport and Input.is_action_just_pressed("teleport"):
         var start_pos = get_translation()
-        teleport(get_teleport_dir())
-        last_teleports.push_back({
-            "start_pos": start_pos,
-            "end_pos": get_translation(),
-            "lifetime": TELEPORT_LOG_TIMEOUT,
-        })
-
-    for lt in last_teleports:
-        lt["lifetime"] -= delta
-    while !last_teleports.empty() && last_teleports.front()["lifetime"] <= 0:
-        last_teleports.pop_front()
+        teleport(get_translation() + TELEPORT_DISTANCE * get_teleport_dir())
+        for enemy in get_tree().get_nodes_in_group("enemy"):
+            enemy.on_Player_teleport(self, start_pos, get_translation())
