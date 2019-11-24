@@ -23,3 +23,8 @@ func mark(position : Vector3, color):
     mat.albedo_color.a = 0.4
     marker.set_surface_material(0, mat)
     add_child(marker)
+
+func _process(delta):
+    if Input.is_action_just_pressed("clearmarkers"):
+        for marker in get_tree().get_nodes_in_group("marker"):
+            marker.queue_free()
