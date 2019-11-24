@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Player.gd" type="Script" id=2]
@@ -8,11 +8,14 @@
 [ext_resource path="res://CameraControlZone.tscn" type="PackedScene" id=6]
 [ext_resource path="res://MarkerSpawner.gd" type="Script" id=7]
 [ext_resource path="res://ShadowLight.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Enemy.tscn" type="PackedScene" id=9]
 
 [node name="Main" type="Node"]
 
-[node name="Player" parent="." instance=ExtResource( 1 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 15.1407, 3.42984, 0 )
+[node name="Player" parent="." groups=[
+"player",
+] instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 18.1587, 3.42984, 0 )
 script = ExtResource( 2 )
 JUMP_HEIGHT = 0.75
 JUMP_DURATION = 0.7
@@ -50,3 +53,6 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 13.0627, 3.42984, 0.563604 )
 [node name="ShadowLight3" parent="." instance=ExtResource( 8 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 13.425, 1.433, 0.564 )
 omni_shadow_mode = 1
+
+[node name="Enemy" parent="." instance=ExtResource( 9 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 11.8935, 0, 0 )
