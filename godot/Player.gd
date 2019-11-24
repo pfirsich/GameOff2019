@@ -24,7 +24,14 @@ func get_teleport_dir():
     return (point_in_z0plane - get_translation()).normalized()
 
 func _physics_process(delta):
-    move_x(int(Input.is_action_pressed("move_right")) - int(Input.is_action_pressed("move_left")), delta)
+    var dir = int(Input.is_action_pressed("move_right")) - int(Input.is_action_pressed("move_left"));
+
+    if sign(dir) == 1:
+        set_rotation(Vector3(0, PI, 0))
+    elif sign(dir) == -1:
+        set_rotation(Vector3(0, 0, 0))
+
+    move_x(dir, delta)
     apply_gravity(delta)
     integrate(delta)
 
